@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ホバー文字シャッフル — Animation Studies</title>
+  <meta name="description" content="ホバー中に文字がランダムなグリフへ置換され、正解に収束するデコード演出。Hover.dev / Aceternity UI 風。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header class="site">
+  <a class="back" href="../">
+    <span class="arrow">←</span>
+    <span>ANIMATION · INDEX</span>
+  </a>
+  <span class="cell-marker">TEXT SHUFFLE</span>
+</header>
+
+<main>
+
+  <!-- ─── Hero ─── -->
+  <section class="hero">
+    <span class="kicker">DESIGN STUDY · ANIMATION</span>
+    <h1 class="hero-title">
+      <span class="ts" data-text-shuffle data-shuffle-on="load" data-shuffle-spread="34">Letters decode</span><br>
+      <span class="ts accent" data-text-shuffle data-shuffle-on="load" data-shuffle-spread="48">on the way in.</span>
+    </h1>
+    <p class="lead">
+      ホバーした位置を起点に、近い文字から順にデコードが伝染して「正解」へ収束する。カーソルを置いた場所から波紋のように解けていく。下のリンクや見出しの左右どちら側から入るかで、伝播の向きが変わるのを確かめて。
+    </p>
+  </section>
+
+  <!-- ─── Interactive playground ─── -->
+  <section class="play">
+    <div class="shou">
+      <h2>ホバーして確かめる</h2>
+      <span class="no">— HOVER ME</span>
+    </div>
+
+    <!-- decode flourish: scrambles and re-resolves to the SAME text -->
+    <nav class="menu" aria-label="demo menu">
+      <a href="#" class="ts menu-link" data-text-shuffle>PROJECTS</a>
+      <a href="#" class="ts menu-link" data-text-shuffle>ABOUT</a>
+      <a href="#" class="ts menu-link" data-text-shuffle>JOURNAL</a>
+      <a href="#" class="ts menu-link" data-text-shuffle>CONTACT</a>
+    </nav>
+
+    <!-- swap: hover scrambles FROM one text TO another, back on leave -->
+    <div class="swap-row">
+      <span class="swap-label">SWAP（hover で別テキストへ）</span>
+      <span class="ts swap-word" data-text-shuffle data-shuffle-to="DECODED">HOVER ME</span>
+      <span class="ts swap-word" data-text-shuffle data-shuffle-to="解読完了" data-shuffle-chars="日本語文字暗号解読完了">ホバー</span>
+    </div>
+
+    <!-- big word, custom glyph set -->
+    <div class="big-row">
+      <span class="ts big-word" data-text-shuffle data-shuffle-spread="56" data-shuffle-chars="01">ANIMATION</span>
+    </div>
+  </section>
+
+  <!-- ─── Usage notes ─── -->
+  <section class="notes">
+    <div class="shou">
+      <h2>使い方</h2>
+      <span class="no">— USAGE</span>
+    </div>
+
+    <div class="notes-grid">
+      <div class="note">
+        <span class="note-no">01</span>
+        <h3>2 ファイルをコピー</h3>
+        <p>本ディレクトリの <code>style.css</code>（`.ts-dud` の色だけ）と <code>script.js</code> を移植先にコピー。外部依存ゼロ。</p>
+      </div>
+      <div class="note">
+        <span class="note-no">02</span>
+        <h3>属性を付けるだけ</h3>
+        <p>シャッフルさせたい要素に <code>class="ts" data-text-shuffle</code> を付ける。初期テキストがそのまま「正解」になり、ホバーで再デコードする。</p>
+      </div>
+      <div class="note">
+        <span class="note-no">03</span>
+        <h3>スワップ / 字種 / 伝播</h3>
+        <p><code>data-shuffle-to</code> で別テキストへ入れ替え、<code>data-shuffle-chars</code> で巡るグリフ集合、<code>data-shuffle-spread</code> で伝播の速さ（波の広がり）を制御。</p>
+      </div>
+    </div>
+
+    <h3 class="sub-h">data 属性</h3>
+    <div class="vars">
+      <div class="var"><code>data-text-shuffle</code><span>有効化マーカー（値不要）</span><em>—</em></div>
+      <div class="var"><code>data-shuffle-on</code><span>トリガー。<code>hover</code>（既定）／ <code>load</code>（読み込み時に1回）</span><em>hover</em></div>
+      <div class="var"><code>data-shuffle-to</code><span>ホバーで入れ替える先のテキスト（離れると戻る）</span><em>なし</em></div>
+      <div class="var"><code>data-shuffle-chars</code><span>シャッフル中に巡るグリフ集合</span><em>記号+カナ+数字</em></div>
+      <div class="var"><code>data-shuffle-spread</code><span>伝播の波が最遠の文字へ届くまでのフレーム数（大きいほどゆっくり広がる）</span><em>40</em></div>
+    </div>
+
+    <h3 class="sub-h">CSS 変数</h3>
+    <div class="vars">
+      <div class="var"><code>--ts-dud</code><span>シャッフル中の「乱れた文字」の色</span><em>#ff2d55</em></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>© 2026 ANIMATION DESIGN STUDY</span>
+  <a href="../">← INDEX</a>
+</footer>
+
+<script src="./script.js"></script>
+</body>
+</html>

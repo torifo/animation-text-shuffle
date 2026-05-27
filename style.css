@@ -1,0 +1,189 @@
+/* ────────────────────────────────────────────
+   C·Ho · Text Shuffle (hover decode)
+   ホバーで文字がランダムグリフを巡り正解へ収束
+   Pure CSS + JS、外部依存ゼロ
+   ──────────────────────────────────────────── */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:where(html,body){line-break:strict;word-break:normal;overflow-wrap:break-word}
+:where(h1,h2,h3,h4){text-wrap:balance}
+:where(p,li){text-wrap:pretty}
+
+:root{
+  --bg:#f4f3ee;
+  --ink:#0a0a0a;
+  --muted:#6a6a6a;
+  --line:#d8d6cc;
+  --paper:#fff;
+  --hi:#ff2d55;
+  --alt:#0066ff;
+  --font:'DM Sans','Noto Sans JP',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+
+  /* ── Component variable ── */
+  --ts-dud:#ff2d55;   /* シャッフル中の乱れた文字の色 */
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font);font-weight:400;line-height:1.65;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+
+/* ─── HEADER ─── */
+header.site{
+  position:sticky;top:0;z-index:50;background:var(--bg);
+  padding:1rem clamp(1.2rem,4vw,3rem);
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  border-bottom:1px solid var(--ink);
+}
+.back{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;
+  display:inline-flex;align-items:center;gap:.6em;
+}
+.back .arrow{transition:transform .25s}
+.back:hover .arrow{transform:translateX(-.3em)}
+.cell-marker{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.22em;color:var(--hi);
+}
+
+/* ────────────────────────────────────────────
+   COMPONENT: .ts (text shuffle)
+   JS が中身を <span class="ts-dud"> 付きで書き換える。
+   CSS 側で必要なのは乱れ文字の色と、字幅の安定だけ。
+   ──────────────────────────────────────────── */
+.ts{
+  font-family:var(--mono);
+  font-variant-ligatures:none;
+  white-space:pre-wrap;            /* 末尾スペースも保持 */
+}
+.ts .ts-dud{
+  color:var(--ts-dud);
+  opacity:.85;
+}
+/* END COMPONENT */
+
+
+/* ─── HERO ─── */
+.hero{
+  max-width:1100px;margin:0 auto;
+  padding:clamp(4rem,10vw,8rem) clamp(1.5rem,4vw,3rem) clamp(2.5rem,5vw,4rem);
+}
+.kicker{
+  display:inline-block;
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.25em;
+  padding:.3em .9em;border:1px solid var(--ink);margin-bottom:1.5rem;
+}
+.hero-title{
+  font-weight:700;font-size:clamp(2.4rem,8vw,5.6rem);
+  line-height:1.04;letter-spacing:-.02em;
+}
+.hero-title .ts{font-family:var(--font)}  /* 見出しは本文書体のまま */
+.hero-title .accent{
+  background:linear-gradient(transparent 62%,var(--hi) 62%,var(--hi) 92%,transparent 92%);
+  padding:0 .08em;
+}
+.lead{
+  font-size:clamp(1rem,1.3vw,1.1rem);
+  color:var(--muted);max-width:40em;margin-top:1.5rem;
+}
+
+/* ─── SECTION SHELL ─── */
+section{max-width:1100px;margin:0 auto;padding:clamp(2.5rem,5vw,4rem) clamp(1.5rem,4vw,3rem)}
+.shou{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  padding-bottom:1rem;border-bottom:1px solid var(--ink);margin-bottom:2.5rem;
+}
+.shou h2{font-size:clamp(1.3rem,2vw,1.7rem);font-weight:700;letter-spacing:.04em}
+.shou .no{font-family:var(--mono);font-size:.78rem;letter-spacing:.25em;color:var(--muted)}
+
+/* ─── PLAYGROUND ─── */
+.menu{
+  display:flex;flex-wrap:wrap;gap:clamp(1.2rem,4vw,3rem);
+  margin-bottom:3rem;
+}
+.menu-link{
+  font-size:clamp(1.3rem,3vw,2.2rem);font-weight:700;letter-spacing:.02em;
+  padding:.1em 0;position:relative;cursor:pointer;
+}
+.menu-link::after{
+  content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--hi);
+  transition:width .3s;
+}
+.menu-link:hover::after{width:100%}
+
+.swap-row{
+  display:flex;align-items:center;flex-wrap:wrap;gap:1.2rem;
+  padding:1.6rem;border:1px solid var(--ink);background:var(--paper);
+  margin-bottom:2rem;
+}
+.swap-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;color:var(--muted)}
+.swap-word{
+  font-size:clamp(1.3rem,3vw,2rem);font-weight:700;letter-spacing:.06em;
+  padding:.2em .6em;border:1px solid var(--ink);background:var(--bg);cursor:pointer;
+}
+
+.big-row{
+  border:1px solid var(--ink);background:var(--ink);
+  padding:clamp(2rem,5vw,4rem) 1.5rem;text-align:center;overflow:hidden;
+}
+.big-word{
+  font-size:clamp(2.5rem,10vw,7rem);font-weight:700;letter-spacing:.04em;
+  color:#fff;cursor:pointer;
+  --ts-dud:#00e5ff;   /* ダーク背景用にシアンの乱れ文字 */
+}
+
+/* ─── NOTES ─── */
+.notes-grid{
+  display:grid;grid-template-columns:1fr;gap:1.2rem;margin-bottom:3rem;
+}
+@media(min-width:780px){.notes-grid{grid-template-columns:repeat(3,1fr)}}
+.note{
+  position:relative;background:var(--paper);border:1px solid var(--ink);
+  padding:1.5rem 1.4rem 1.4rem;
+}
+.note-no{
+  position:absolute;top:1rem;right:1rem;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--muted);
+}
+.note h3{font-size:1.02rem;font-weight:700;margin-bottom:.7rem;letter-spacing:.02em}
+.note p{font-size:.86rem;color:var(--muted);line-height:1.8}
+.note code{font-family:var(--mono);font-size:.85em;background:var(--bg);padding:.1em .35em;border:1px solid var(--line)}
+
+.sub-h{
+  font-size:1rem;font-weight:700;letter-spacing:.04em;
+  margin:2rem 0 1rem;padding-bottom:.7rem;border-bottom:1px dashed var(--ink);
+}
+.vars{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--ink);background:var(--paper)}
+.var{
+  display:grid;grid-template-columns:minmax(11rem,auto) 1fr auto;gap:1rem;
+  padding:.8rem 1rem;border-bottom:1px solid var(--line);align-items:center;
+}
+.var:last-child{border-bottom:none}
+.var code{font-family:var(--mono);font-size:.82rem;color:var(--hi);font-weight:500}
+.var span{font-size:.85rem;color:var(--muted);line-height:1.5}
+.var span code{color:var(--ink);background:var(--bg);padding:0 .3em;border:1px solid var(--line)}
+.var em{
+  font-family:var(--mono);font-size:.78rem;font-style:normal;color:var(--ink);
+  background:var(--bg);padding:.15em .55em;border:1px solid var(--line);white-space:nowrap;
+}
+@media(max-width:680px){
+  .var{grid-template-columns:1fr;gap:.3rem;padding:.9rem 1rem}
+  .var em{justify-self:start}
+}
+
+/* ─── FOOTER ─── */
+footer{
+  padding:2rem clamp(1.2rem,4vw,3rem) 1.5rem;
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--muted);
+  border-top:1px solid var(--ink);
+}
+footer a{color:var(--ink)}
+
+/* Reduced motion: no scramble (JS も尊重するが二重で保険) */
+@media (prefers-reduced-motion: reduce){
+  .ts .ts-dud{color:inherit;opacity:1}
+}
